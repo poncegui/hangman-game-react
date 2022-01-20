@@ -1,69 +1,68 @@
-
 import '../styles/App.scss';
-import {useEffect, useState } from "react";
-import getApi  from '../services/API';
-
-
+import { useEffect, useState } from 'react';
+import getApi from '../services/API';
 
 function App() {
   //Estados
-  const [wordsData, setWordsData] = useState("");
+  const [wordsData, setWordsData] = useState('');
 
   //Services
   useEffect(() => {
     getApi().then((words) => {
-      setWordsData(words.body.Word)
-    }) 
-   
+      setWordsData(words.body.Word);
+    });
   }, []);
 
-  console.log(wordsData)
+  console.log(wordsData);
 
-  const wordRandom = wordsData.split("").map((wordSelected) => {
-    return (
-    console.log(wordSelected)
-    )
-  })
+  const wordRandom = wordsData.split('').map((wordSelected) => {
+    return console.log(wordSelected);
+  });
 
-  const [word, setWord] = useState("");
+  const [word, setWord] = useState('');
   const [userLetters, setUserLetters] = useState([]);
   const [lastLetter, setLastLetter] = useState();
 
-  const wordLetters = word.split('');
+  const wordLetters = wordsData.split('');
 
   const handleLastLetter = (ev) => {
-    if (ev.target.value.match(/^[a-zA-ZáäéëíïóöúüÁÄÉËÍÏÓÖÚÜñÑ]/) && !userLetters.includes(ev.target.value)) {
+    if (
+      ev.target.value.match(/^[a-zA-ZáäéëíïóöúüÁÄÉËÍÏÓÖÚÜñÑ]/) &&
+      !userLetters.includes(ev.target.value)
+    ) {
       setLastLetter(ev.currentTarget.value);
       setUserLetters([...userLetters, ev.currentTarget.value]);
     }
-  }
+  };
   const renderSolutionLetters = () => {
-    return wordLetters.map(eachLetter => {
-      if (userLetters.includes(eachLetter)) {
-        return <li className='letter'>{eachLetter}</li>
-      } else {
-        return <li className='letter'></li>
-      }
-    })
-  }
+    return wordLetters.map((eachLetter, index) => {
+      return (
+        <li key={index} className="letter">
+          <small>{userLetters.includes(eachLetter) ? eachLetter : ''}</small>
+        </li>
+      );
+    });
+  };
 
   const renderErrorLetters = () => {
-    return (
-      userLetters
-        .filter(eachLetter => {
-          return !wordLetters.includes(eachLetter);
-        })
-        .map(eachLetter => {
-          return <li className='letter'>{eachLetter}</li>;
-        })
-    )
-  }
+    return userLetters
+      .filter((eachLetter) => {
+        return !wordLetters.includes(eachLetter);
+      })
+      .map((eachLetter, index) => {
+        return (
+          <li key={index} className="letter">
+            {eachLetter}
+          </li>
+        );
+      });
+  };
 
   const renderDummy = () => {
-    return userLetters.filter(eachLetter => {
+    return userLetters.filter((eachLetter) => {
       return !wordLetters.includes(eachLetter);
     }).length;
-  }
+  };
 
   return (
     <div id="root">
@@ -75,18 +74,16 @@ function App() {
           <section>
             <div className="solution">
               <h2 className="title">Solución:</h2>
-              <ul className="letters">
-                {renderSolutionLetters()}
-              </ul>
+              <ul className="letters">{renderSolutionLetters()}</ul>
             </div>
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
-              <ul className="letters">
-                {renderErrorLetters()}
-              </ul>
+              <ul className="letters">{renderErrorLetters()}</ul>
             </div>
             <form className="form">
-              <label className="title" htmlFor="last-letter">Escribe una letra:</label>
+              <label className="title" htmlFor="last-letter">
+                Escribe una letra:
+              </label>
               <input
                 autoComplete="off"
                 className="form__input"
@@ -117,7 +114,7 @@ function App() {
           </section>
         </main>
       </div>
-    </div >
+    </div>
   );
 }
 
