@@ -1,6 +1,10 @@
 import '../styles/App.scss';
+import { Route, Link, Switch } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApi from '../services/API';
+import Dummy from './Dummy';
+import SolutionLetters from './SolutionLetters';
+import Footer from './Footer';
 
 function App() {
   //Estados
@@ -34,15 +38,6 @@ function App() {
       setUserLetters([...userLetters, ev.currentTarget.value]);
     }
   };
-  const renderSolutionLetters = () => {
-    return wordLetters.map((eachLetter, index) => {
-      return (
-        <li key={index} className="letter">
-          <small>{userLetters.includes(eachLetter) ? eachLetter : ''}</small>
-        </li>
-      );
-    });
-  };
 
   const renderErrorLetters = () => {
     return userLetters
@@ -72,10 +67,10 @@ function App() {
         </header>
         <main className="main">
           <section>
-            <div className="solution">
-              <h2 className="title">Solución:</h2>
-              <ul className="letters">{renderSolutionLetters()}</ul>
-            </div>
+            <SolutionLetters
+              wordLetters={wordLetters}
+              userLetters={userLetters}
+            />
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
               <ul className="letters">{renderErrorLetters()}</ul>
@@ -96,23 +91,10 @@ function App() {
               />
             </form>
           </section>
+          <Dummy renderDummy={renderDummy()} />
           {/* <button onClick={handleError}>test</button> */}
-          <section className={`dummy error-${renderDummy()}`}>
-            <span className="error-13 eye"></span>
-            <span className="error-12 eye"></span>
-            <span className="error-11 line"></span>
-            <span className="error-10 line"></span>
-            <span className="error-9 line"></span>
-            <span className="error-8 line"></span>
-            <span className="error-7 line"></span>
-            <span className="error-6 head"></span>
-            <span className="error-5 line"></span>
-            <span className="error-4 line"></span>
-            <span className="error-3 line"></span>
-            <span className="error-2 line"></span>
-            <span className="error-1 line"></span>
-          </section>
         </main>
+        <Footer />
       </div>
     </div>
   );
